@@ -1,0 +1,47 @@
+---
+title: "API Lab"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dataRetrieval)
+library(ggplot2)
+library(metajam)
+```
+
+```{r}
+siteNumber <- "11118500" 
+ChoptankInfo <- readNWISsite(siteNumber)
+parameterCd <- "00060"
+
+#Raw daily data:
+rawDailyData <- readNWISdv(siteNumber,parameterCd,
+                      "2019-10-01","2020-10-05")
+```
+
+
+
+```{r}
+ggplot(data = rawDailyData, aes(x = Date, y = X_00060_00003)) +
+  geom_point()
+```
+
+
+
+
+```{r}
+data_obj <- "https://arcticdata.io/metacat/d1/mn/v2/object/urn%3Auuid%3A9e123f84-ce0d-4094-b898-c9e73680eafa"
+path <- "~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab"
+download_d1_data(data_obj, path)
+my_data <- read_d1_files("~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab/doi_10.18739_A2RV0D11H__Alaska_Schools_Rentention2009_15__csv")
+my_data_frame <- read.csv("~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab/doi_10.18739_A2RV0D11H__Alaska_Schools_Rentention2009_15__csv/Alaska_Schools_Rentention2009_15.csv")
+
+```
+
+
+```{r}
+
+```
+
+
