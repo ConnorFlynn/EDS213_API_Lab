@@ -9,6 +9,7 @@ library(dataRetrieval)
 library(ggplot2)
 library(metajam)
 library(tidyverse)
+library(here)
 ```
 
 ```{r}
@@ -41,12 +42,37 @@ my_data_frame <- read.csv("~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab/doi_10.1
 ```
 
 
+
+
 ```{r}
 my_new_data <- my_data_frame %>% 
   group_by(District.Name) %>% 
   summarise(mean_district = mean(Avg.T.Retention.5yrs))
 
 ```
+
+```{r}
+# Household language 
+
+household_language <- read.csv(here("household_language.csv"))
+
+household_language1 <- household_language %>% 
+  select(Year, speak_only_english, total) %>% 
+  filter(Year >= 2009) %>% 
+  group_by(Year) %>% 
+  summarise(total_eng = sum(speak_only_english), total = sum(total)) %>% 
+  mutate(percent = total_eng / total)
+
+
+household_language1_plot = ggplot(household_language1, aes(x = Year, y = percent)) +
+  geom_point()
+    
+
+household_language1_plot
+```
+
+
+
 
 ```{r}
 # Santa Paula Creek
