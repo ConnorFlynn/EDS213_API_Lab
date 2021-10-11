@@ -8,6 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dataRetrieval)
 library(ggplot2)
 library(metajam)
+library(tidyverse)
 ```
 
 ```{r}
@@ -41,7 +42,71 @@ my_data_frame <- read.csv("~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab/doi_10.1
 
 
 ```{r}
+my_new_data <- my_data_frame %>% 
+  group_by(District.Name) %>% 
+  summarise(mean_district = mean(Avg.T.Retention.5yrs))
 
 ```
 
+```{r}
+# Santa Paula Creek
+
+siteNumber <- "11113500" 
+ChoptankInfo <- readNWISsite(siteNumber)
+parameterCd <- "00060"
+
+#Raw daily data:
+
+
+october_4_rainfall_test_sp <- readNWISdata(sites="11113500", service="iv", 
+                   parameterCd="00060", 
+                   startDate="2020-10-04T00:00",endDate="2020-10-05T12:00",
+                   tz="America/Chicago")
+```
+
+
+```{r}
+october_4_rainfall_plot_sp <- ggplot(data = october_4_rainfall_test_sp, aes(x = dateTime, y = X_00060_00000)) +
+  geom_line()
+
+
+october_4_rainfall_plot_sp
+```
+
+```{r}
+# Ventura
+
+siteNumber <- "11118500" 
+ChoptankInfo <- readNWISsite(siteNumber)
+parameterCd <- "00060"
+
+#Raw daily data:
+
+
+october_4_rainfall_test_v <- readNWISdata(sites="11118500", service="iv", 
+                   parameterCd="00060", 
+                   startDate="2020-10-04T00:00",endDate="2020-10-05T12:00",
+                   tz="America/Chicago")
+```
+
+```{r}
+october_4_rainfall_plot_v <- ggplot(data = october_4_rainfall_test_v, aes(x = dateTime, y = X_00060_00000)) +
+  geom_line()
+
+
+october_4_rainfall_plot_v
+```
+
+```{r}
+rainfall_combined <- rbind(october_4_rainfall_test_v, october_4_rainfall_test_sp)
+
+rainfall_combined
+
+ggplot(data = rainfall_combined, aes(x = dateTime, y = X_00060_00000, 
+                                     color = site_no)) +
+  geom_line() +
+  labs(title = "Ventura and Santa Paula Stream Flow",
+       x = "Time",
+       y = "Discharge (cubic feet per second")
+```
 
