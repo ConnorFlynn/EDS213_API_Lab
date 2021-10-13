@@ -12,6 +12,9 @@ library(tidyverse)
 library(here)
 ```
 
+USGS API
+
+
 ```{r}
 siteNumber <- "11118500" 
 ChoptankInfo <- readNWISsite(siteNumber)
@@ -26,30 +29,28 @@ rawDailyData <- readNWISdv(siteNumber,parameterCd,
 
 ```{r}
 ggplot(data = rawDailyData, aes(x = Date, y = X_00060_00003)) +
-  geom_point()
+  geom_point() +
+  labs(title = "Discharge time-series for the Ventura River from 2019-10-01 to 2020-10-05",
+       y = "Discharge (cubic feet per second)",
+       x = "Time")
+                      
 ```
 
 
 
 
 ```{r}
-data_obj <- "https://arcticdata.io/metacat/d1/mn/v2/object/urn%3Auuid%3A9e123f84-ce0d-4094-b898-c9e73680eafa"
-path <- "~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab"
-download_d1_data(data_obj, path)
-my_data <- read_d1_files("~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab/doi_10.18739_A2RV0D11H__Alaska_Schools_Rentention2009_15__csv")
+# data_obj <- "https://arcticdata.io/metacat/d1/mn/v2/object/urn%3Auuid%3A9e123f84-ce0d-4094-b898-c9e73680eafa"
+# path <- "~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab"
+# download_d1_data(data_obj, path)
+# my_data <- read_d1_files("~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab/doi_10.18739_A2RV0D11H__Alaska_Schools_Rentention2009_15__csv")
 my_data_frame <- read.csv("~/Documents/MEDS/EDS213/Week2/EDS213_API_Lab/doi_10.18739_A2RV0D11H__Alaska_Schools_Rentention2009_15__csv/Alaska_Schools_Rentention2009_15.csv")
 
 ```
 
 
+Household Language
 
-
-```{r}
-my_new_data <- my_data_frame %>% 
-  group_by(District.Name) %>% 
-  summarise(mean_district = mean(Avg.T.Retention.5yrs))
-
-```
 
 ```{r}
 # Household language 
@@ -65,7 +66,10 @@ household_language1 <- household_language %>%
 
 
 household_language1_plot = ggplot(household_language1, aes(x = Year, y = percent)) +
-  geom_point()
+  geom_point() +
+  labs(title = "Percent of Alaskan Households that only Speak English",
+       y = "Percent",
+       x = "Year")
     
 
 household_language1_plot
@@ -93,7 +97,10 @@ october_4_rainfall_test_sp <- readNWISdata(sites="11113500", service="iv",
 
 ```{r}
 october_4_rainfall_plot_sp <- ggplot(data = october_4_rainfall_test_sp, aes(x = dateTime, y = X_00060_00000)) +
-  geom_line()
+  geom_line() + 
+  labs(title = "Santa Paula Stream Flow Response to October 4TH, 2021 Rain Event ", 
+       y = "Discharge (cubic feet per second",
+       x = "Time")
 
 
 october_4_rainfall_plot_sp
@@ -117,7 +124,10 @@ october_4_rainfall_test_v <- readNWISdata(sites="11118500", service="iv",
 
 ```{r}
 october_4_rainfall_plot_v <- ggplot(data = october_4_rainfall_test_v, aes(x = dateTime, y = X_00060_00000)) +
-  geom_line()
+  geom_line() +
+   labs(title = "Ventura Stream Flow Response to October 4TH, 2021 Rain Event ", 
+       y = "Discharge (cubic feet per second",
+       x = "Time")
 
 
 october_4_rainfall_plot_v
@@ -126,13 +136,14 @@ october_4_rainfall_plot_v
 ```{r}
 rainfall_combined <- rbind(october_4_rainfall_test_v, october_4_rainfall_test_sp)
 
-rainfall_combined
 
 ggplot(data = rainfall_combined, aes(x = dateTime, y = X_00060_00000, 
                                      color = site_no)) +
   geom_line() +
-  labs(title = "Ventura and Santa Paula Stream Flow",
+  labs(title = "Ventura and Santa Paula Stream Flow Response to October 4th, 2021 Rain Event",
        x = "Time",
        y = "Discharge (cubic feet per second")
 ```
 
+
+Stream Flow peaked at both locations around 12:00 PM on October 5th.
