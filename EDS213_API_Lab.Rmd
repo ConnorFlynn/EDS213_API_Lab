@@ -133,6 +133,11 @@ october_4_rainfall_plot_v <- ggplot(data = october_4_rainfall_test_v, aes(x = da
 october_4_rainfall_plot_v
 ```
 
+
+I used rbind() to combine the two sites. Another way to pull data from multiple locations could be to 
+add multiple siteNumbers. 
+
+
 ```{r}
 rainfall_combined <- rbind(october_4_rainfall_test_v, october_4_rainfall_test_sp)
 
